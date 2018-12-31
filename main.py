@@ -1,3 +1,4 @@
+import requests
 import sys
 from configparser import ConfigParser
 
@@ -13,6 +14,18 @@ def main():
     api = config['API']
     username = api['username']
     hue_ip = api['hue_ip']
+
+
+def turn_on_light(ip, username, light_no):
+    req = "http://{}/api/{}/lights/{}/state".format(ip, username, light_no)
+    body = "{\"on\":true}"
+    res = requests.put(req, data=body)
+
+
+def turn_off_light(ip, username, light_no):
+    req = "http://{}/api/{}/lights/{}/state".format(ip, username, light_no)
+    body = "{\"on\":false}"
+    res = requests.put(req, data=body)
 
 
 if __name__ == "__main__":
