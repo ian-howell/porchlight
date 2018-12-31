@@ -32,5 +32,19 @@ def turn_off_light(ip, username, light_no):
     res = requests.put(req, data=body)
 
 
+def get_sundown(key, city):
+    api_string = _build_url(key, city)
+    res = requests.get(api_string)
+    weather_info = res.json()
+    return weather_info['sys']['sunset']
+
+
+def _build_url(key, city):
+    city_id = "id={}".format(city)
+    app_id = "APPID={}".format(key)
+    base_url = "http://api.openweathermap.org/data/2.5/weather"
+    return "{}?{}&{}".format(base_url, city_id, app_id)
+
+
 if __name__ == "__main__":
     main()
