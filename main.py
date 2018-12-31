@@ -28,14 +28,7 @@ def main():
     light_on = False
     sundown = get_sundown(weather_api_key, city_id)
     while True:
-        if not light_on:
-            if time.time() >= sundown:
-                turn_on_light(hue_ip, username, PORCH_LIGHT)
-                light_on = True
-            else:
-                # Waiting for sundown
-                time.sleep(5 * MINUTE)
-        else:
+        if light_on:
             if time.localtime(time.time()).tm_hour >= 22:
                 turn_off_light(hue_ip, username, PORCH_LIGHT)
                 light_on = False
@@ -45,6 +38,13 @@ def main():
                 sundown = get_sundown(weather_api_key, city_id)
             else:
                 # Waiting for 10PM
+                time.sleep(5 * MINUTE)
+        else:
+            if time.time() >= sundown:
+                turn_on_light(hue_ip, username, PORCH_LIGHT)
+                light_on = True
+            else:
+                # Waiting for sundown
                 time.sleep(5 * MINUTE)
 
 
