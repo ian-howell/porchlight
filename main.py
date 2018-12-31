@@ -15,6 +15,10 @@ def main():
     username = hue['username']
     hue_ip = hue['ip']
 
+    weather = config['WEATHER']
+    weather_api_key = weather['api_key']
+    city_id = weather['city_id']
+
 
 def turn_on_light(ip, username, light_no):
     req = "http://{}/api/{}/lights/{}/state".format(ip, username, light_no)
