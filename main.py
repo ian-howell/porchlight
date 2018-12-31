@@ -1,6 +1,12 @@
+from configparser import ConfigParser
 import requests
 import sys
-from configparser import ConfigParser
+import time
+
+
+PORCH_LIGHT = 4
+MINUTE = 60
+HOUR = 60 * MINUTE
 
 
 def main():
@@ -18,6 +24,28 @@ def main():
     weather = config['WEATHER']
     weather_api_key = weather['api_key']
     city_id = weather['city_id']
+
+    light_on = False
+    sundown = get_sundown(weather_api_key, city_id)
+    while True:
+        if not light_on:
+            if time.time() >= sundown:
+                turn_on_light(hue_ip, username, PORCH_LIGHT)
+                light_on = True
+            else:
+                # Waiting for sundown
+                time.sleep(5 * MINUTE)
+        else:
+            if time.localtime(time.time()).tm_hour >= 22:
+                turn_off_light(hue_ip, username, PORCH_LIGHT)
+                light_on = False
+                # It's 10PM, might as well sleep until 2PM tomorrow
+                time.sleep(16 * HOUR)
+                # By the time this executes, it's the next day
+                sundown = get_sundown(weather_api_key, city_id)
+            else:
+                # Waiting for 10PM
+                time.sleep(5 * MINUTE)
 
 
 def turn_on_light(ip, username, light_no):
