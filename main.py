@@ -11,9 +11,9 @@ def main():
         # Use the default
         config.read('config.ini')
 
-    api = config['API']
-    username = api['username']
-    hue_ip = api['hue_ip']
+    hue = config['HUE']
+    username = hue['username']
+    hue_ip = hue['ip']
 
 
 def turn_on_light(ip, username, light_no):
